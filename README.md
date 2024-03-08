@@ -8,4 +8,4 @@ npx expo run:android
 
 # Run
 
-npx expo run --dev-client
+npx expo start --dev-client
