@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, Scr
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
-import { signup } from "../../api/rest/auth";
+import { sendEmail, signup } from "../../api/rest/auth";
 import { isValidEmail, isValidPassword } from "../../../utils/StringRegrex";
 import Toast from "react-native-toast-message";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -61,9 +61,24 @@ const Signup = () => {
                 password: password,
                 confirmPassword: confirmPassword,
             });
+      
+            setLoading(false);
 
             if (response.message === "Email already registered") {
                 setMessage("Email đã được đăng ký!");
+            } else if (response.message === "Account needs activated") {
+                setMessage("Email đã được đăng ký nhưng chưa được kích hoạt. Vui lòng kích hoạt tiếp theo sau đây!");
+                const response = await sendEmail({
+                    params: {
+                        email: email,
+                        type: "register"
+                    },
+                });
+
+                if (response.status === 200) navigation.navigate("OTP", { email: email, type: "register"});
+                else {
+                    setMessage("Đã có lỗi xảy ra khi gửi mã OTP!");
+                }
             } else if (response.message === "Passwords not match") {
                 setMessage("Mật khẩu không khớp!");
             } else if (response.message === "Invalid password format") {
@@ -71,14 +86,24 @@ const Signup = () => {
             } else if (response.status === 200) {
                 Toast.show({
                     type: "success",
-                    text1: "Đăng ký thành công! Vui lòng đăng nhập!",
+                    text1: "Tài khoản của bạn cần được kích hoạt trước khi đăng nhập!",
                 });
-                navigation.navigate("Login");
+                setMessage("");
+
+                const response = await sendEmail({
+                    params: {
+                        email: email,
+                        type: "register",
+                    },
+                });
+
+                if (response.status === 200) navigation.navigate("OTP", { email: email, type: "register" });
+                else {
+                    setMessage("Đã có lỗi xảy ra khi gửi mã OTP!");
+                }
             } else {
                 setMessage("Đã có lỗi xảy ra! Vui lòng thử lại!");
             }
-            
-            setLoading(false);
         }
     };
 

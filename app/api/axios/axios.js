@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://192.168.247.2:8080/docs-sharing/api/v1";
+const BASE_URL = "http://192.168.0.101:8080/docs-sharing/api/v1";
 
 export default axios.create({
     baseURL: BASE_URL,

@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, TextInput, Button, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
-import { login } from "../../api/rest/auth";
+import { login, sendEmail } from "../../api/rest/auth";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
 import { getProfile } from "../../api/rest/user";
@@ -15,8 +15,6 @@ import { BSON } from "realm";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const Login = () => {
-    //usePrivateAxios();
-
     const realm = useRealm();
 
     const navigation = useNavigation();
@@ -66,6 +64,7 @@ const Login = () => {
             text1: message,
         });
         setMessage("");
+        setStatus(1);
     };
 
     const handleLogin = async () => {
@@ -79,18 +78,34 @@ const Login = () => {
         setLoading(false);
 
         if (response.message === "Email not registered") {
-            setMessage("Email không đúng!");
+            setMessage("Email chưa đăng ký!");
             setStatus(-1);
         } else if (response.message === "Wrong password") {
             setMessage("Mật khẩu không đúng!");
             setStatus(-1);
+        } else if (response.message === "Account disabled") {
+            setMessage("Tài khoản đã bị đình chỉ!");
+            setStatus(-1);
+        } else if (response.message === "Account needs activated") {
+            setMessage("Tài khoản của bạn cần được kích hoạt!");
+            setStatus(-1);
+
+            const response = await sendEmail({
+                params: {
+                    email: email,
+                    type: "register",
+                },
+            });
+
+            if (response.status === 200) navigation.navigate("OTP", { email: email, type: "register" });
+            else {
+                setMessage("Đã có lỗi xảy ra khi gửi mã OTP!");
+                setStatus(-1);
+            }
         } else if (response.status === 400) {
             setMessage("Có lỗi xảy ra! Vui lòng thử lại sau!");
             setStatus(-1);
         } else {
-            realm.write(() => {
-                realm.deleteAll(); // hoặc realm.deleteAllData()
-            });
             addProfile("********", email, response.data.accessToken, response.data.refreshToken);
 
             const config = {

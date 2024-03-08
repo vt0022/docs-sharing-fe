@@ -19,7 +19,7 @@ const OTP = ({ route }) => {
 
     const initialSeconds = 15 * 60 - 5; // 15 phút
 
-    const { email } = route.params;
+    const { email, type } = route.params;
 
     const [countdown, setCountdown] = useState(initialSeconds);
     const [no1, setNo1] = useState("");
@@ -74,6 +74,7 @@ const OTP = ({ route }) => {
         const response = await sendEmail({
             params: {
                 email: email,
+                type: type,
             },
         });
 
@@ -101,6 +102,7 @@ const OTP = ({ route }) => {
             params: {
                 email: email,
                 code: code,
+                type: type,
             },
         });
 
@@ -113,7 +115,19 @@ const OTP = ({ route }) => {
         } else if (response.message === "Verification code is expired") {
             setMessage("Mã OTP đã hết hạn!");
         } else if (response.status === 200) {
-            navigation.navigate("NewPassword", { email: email });
+            if (response.message === "Verify user successfully on resetting") {
+                navigation.navigate("NewPassword", { email: email });
+                Toast.show({
+                    type: "success",
+                    text1: "Vui lòng nhập mật khẩu mới!",
+                });
+            } else {
+                navigation.navigate("Login");
+                Toast.show({
+                    type: "success",
+                    text1: "Đăng ký thành công. Vui lòng đăng nhập!",
+                });
+            }
         } else {
             setMessage("Đã xảy ra lỗi! Vui lòng thử lại sau!");
         }

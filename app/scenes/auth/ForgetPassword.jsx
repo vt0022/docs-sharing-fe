@@ -39,15 +39,16 @@ const ForgetPassword = () => {
             const response = await sendEmail({
                 params: {
                     email: email,
+                    type: "reset",
                 },
             });
 
-                        setLoading(false);
+            setLoading(false);
 
             if (response.message === "Email not registered") {
                 setMessage("Email không tồn tại!");
             } else if (response.status === 200) {
-                navigation.navigate("OTP", { email: email });
+                navigation.navigate("OTP", { email: email, type: "reset" });
             } else {
                 setMessage("Đã xảy ra lỗi! Vui lòng thử lại sau!");
             }

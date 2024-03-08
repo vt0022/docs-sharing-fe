@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Pressable, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Button, Pressable, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,6 +23,7 @@ const TopBar = () => {
 
     return (
         <SafeAreaView className="bg-[#386BF6] rounded-b-3xl">
+            <StatusBar backgroundColor="#386BF6" />
             <View className="flex-row justify-between items-center p-5">
                 <Feather name="align-left" size={35} color="white" />
 
