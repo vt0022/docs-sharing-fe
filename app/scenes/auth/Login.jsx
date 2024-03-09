@@ -7,8 +7,6 @@ import { login, sendEmail } from "../../api/rest/auth";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
 import { getProfile } from "../../api/rest/user";
-import usePrivateAxios from "../../api/axios/usePrivateAxios";
-import { addProfile } from "../../services/RealM";
 import { Profile } from "../../models/Profile";
 import { useQuery, useRealm } from "@realm/react";
 import { BSON } from "realm";
