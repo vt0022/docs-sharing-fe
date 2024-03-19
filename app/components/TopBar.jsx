@@ -1,63 +1,61 @@
-import React from "react";
-import { Button, Pressable, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { Octicons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { useRealm } from "@realm/react";
-import { useNavigation } from "@react-navigation/native";
-import Modal from "react-native-modal";
+import React from 'react'
+import { Button, Pressable, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import { Octicons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
+import { useRealm } from '@realm/react'
+import { useNavigation } from '@react-navigation/native'
+import Modal from 'react-native-modal'
+import { useDispatch } from 'react-redux'
+import { removeAuth } from '../redux/reducers/userSlice'
 
 const TopBar = () => {
-    const realm = useRealm();
+  const realm = useRealm()
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
 
-    const navigation = useNavigation();
+  const handleLogout = () => {
+    dispatch(removeAuth())
+  }
 
-    const handleLogout = () => {
-        realm.write(() => {
-            realm.deleteAll(); // hoặc realm.deleteAllData()
-        });
+  return (
+    <SafeAreaView className="bg-[#386BF6] rounded-b-3xl">
+      <StatusBar backgroundColor="#386BF6" />
+      <View className="flex-row justify-between items-center p-5">
+        <Feather name="align-left" size={35} color="white" />
 
-        navigation.navigate("Login");
-    };
+        <Text className="italic text-white text-lg font-medium">Sharing Docs</Text>
 
-    return (
-        <SafeAreaView className="bg-[#386BF6] rounded-b-3xl">
-            <StatusBar backgroundColor="#386BF6" />
-            <View className="flex-row justify-between items-center p-5">
-                <Feather name="align-left" size={35} color="white" />
+        <View className="flex items-center justify-center">
+          <TouchableOpacity className="bg-[#F1F4F5] w-[35px] h-[35px] rounded-full flex items-center justify-center">
+            <Octicons name="bell-fill" size={18} color="#2D3F7B" />
+          </TouchableOpacity>
 
-                <Text className="italic text-white text-lg font-medium">Sharing Docs</Text>
+          <TouchableOpacity className="mt-2" onPress={handleLogout}>
+            <AntDesign name="logout" size={25} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
-                <View className="flex items-center justify-center">
-                    <TouchableOpacity className="bg-[#F1F4F5] w-[35px] h-[35px] rounded-full flex items-center justify-center">
-                        <Octicons name="bell-fill" size={18} color="#2D3F7B" />
-                    </TouchableOpacity>
+      <Text className="text-center text-white">Bạn muốn tìm kiếm tài liệu gì?</Text>
 
-                    <TouchableOpacity className="mt-2" onPress={handleLogout}>
-                        <AntDesign name="logout" size={25} color="white" />
-                    </TouchableOpacity>
-                </View>
-            </View>
+      <View className="flex-row justify-between p-5 items-center">
+        <View className="flex-row items-center space-x-2">
+          <Feather name="search" size={30} color="white" />
 
-            <Text className="text-center text-white">Bạn muốn tìm kiếm tài liệu gì?</Text>
+          <TextInput placeholder="| Search.." className="text-lg text-white" />
+        </View>
 
-            <View className="flex-row justify-between p-5 items-center">
-                <View className="flex-row items-center space-x-2">
-                    <Feather name="search" size={30} color="white" />
+        <View>
+          <TouchableOpacity className="flex-row bg-[#5D56F3] rounded-full items-center py-1 px-3 space-x-2">
+            <Ionicons name="filter-circle" size={26} color="white" />
+            <Text className="text-white">Bộ lọc</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-                    <TextInput placeholder="| Search.." className="text-lg text-white" />
-                </View>
-
-                <View>
-                    <TouchableOpacity className="flex-row bg-[#5D56F3] rounded-full items-center py-1 px-3 space-x-2">
-                        <Ionicons name="filter-circle" size={26} color="white" />
-                        <Text className="text-white">Bộ lọc</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            {/* <Modal isVisible={true} className="flex-1">
+      {/* <Modal isVisible={true} className="flex-1">
                 <View className="flex items-center bg-white rounded-xl py-10">
                     <Text className="text-xl font-bold">Bạn có chắc muốn đăng xuất!</Text>
 
@@ -72,8 +70,8 @@ const TopBar = () => {
                     </View>
                 </View>
             </Modal> */}
-        </SafeAreaView>
-    );
-};
+    </SafeAreaView>
+  )
+}
 
-export default TopBar;
+export default TopBar
