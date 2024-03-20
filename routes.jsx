@@ -8,7 +8,7 @@ import ForgetPassword from './app/scenes/auth/ForgetPassword'
 import OTP from './app/scenes/auth/OTP'
 import NewPassword from './app/scenes/auth/NewPassword'
 import Splash1 from './app/scenes/splash/Splash'
-import Home from './app/scenes/main/Home'
+import Home from './app/scenes/home/Home'
 
 const Stack = createNativeStackNavigator()
 

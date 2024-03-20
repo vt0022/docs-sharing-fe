@@ -9,21 +9,31 @@ import { useNavigation } from '@react-navigation/native'
 import Modal from 'react-native-modal'
 import { useDispatch } from 'react-redux'
 import { removeAuth } from '../redux/reducers/userSlice'
+import { appColors } from '../constants/appColors'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 const TopBar = () => {
   const realm = useRealm()
+  const navigation = createNativeStackNavigator()
   const dispatch = useDispatch()
-  const navigation = useNavigation()
 
   const handleLogout = () => {
     dispatch(removeAuth())
   }
 
   return (
-    <SafeAreaView className="bg-[#386BF6] rounded-b-3xl">
-      <StatusBar backgroundColor="#386BF6" />
-      <View className="flex-row justify-between items-center p-5">
-        <Feather name="align-left" size={35} color="white" />
+    <View
+      style={{
+        backgroundColor: appColors.primary,
+        borderBottomLeftRadius: 40,
+        borderBottomRightRadius: 40,
+        paddingTop: 20,
+      }}
+    >
+      <View className="flex-row justify-between items-center p-4">
+        <TouchableOpacity>
+          <Feather name="align-left" size={35} color="white" />
+        </TouchableOpacity>
 
         <Text className="italic text-white text-lg font-medium">Sharing Docs</Text>
 
@@ -32,9 +42,9 @@ const TopBar = () => {
             <Octicons name="bell-fill" size={18} color="#2D3F7B" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="mt-2" onPress={handleLogout}>
+          {/* <TouchableOpacity className="mt-2" onPress={handleLogout}>
             <AntDesign name="logout" size={25} color="white" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -43,8 +53,7 @@ const TopBar = () => {
       <View className="flex-row justify-between p-5 items-center">
         <View className="flex-row items-center space-x-2">
           <Feather name="search" size={30} color="white" />
-
-          <TextInput placeholder="| Search.." className="text-lg text-white" />
+          <TextInput placeholder="| Tìm kiếm.." className="text-lg text-white" />
         </View>
 
         <View>
@@ -70,7 +79,7 @@ const TopBar = () => {
                     </View>
                 </View>
             </Modal> */}
-    </SafeAreaView>
+    </View>
   )
 }
 
