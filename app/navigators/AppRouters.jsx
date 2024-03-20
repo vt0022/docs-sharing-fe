@@ -16,7 +16,7 @@ const AppRouters = () => {
     return () => clearTimeout(timeout)
   }, [])
 
-  return <>{isShowSplash ? <Splash /> : auth.accesstoken ? <MainNavigator /> : <AuthNavigator />}</>
+  return <>{isShowSplash ? <Splash /> : auth.accessToken ? <MainNavigator /> : <MainNavigator />}</>
 }
 
 export default AppRouters

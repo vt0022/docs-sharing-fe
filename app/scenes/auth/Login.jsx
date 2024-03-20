@@ -9,9 +9,10 @@ import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { useDispatch } from 'react-redux'
-import { loginSuccess } from '../../redux/reducers/userSlice'
+import { addProfile, loginSuccess } from '../../redux/reducers/userSlice'
 import * as yup from 'yup'
 import { Formik } from 'formik'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Login = () => {
   const navigation = useNavigation()
@@ -25,11 +26,15 @@ const Login = () => {
       setIsLoading(false)
       if (resp.status === 200) {
         dispatch(loginSuccess(resp.data))
+        await AsyncStorage.setItem('auth', JSON.stringify(resp.data))
+        const profileResp = await userServices.getProfile(resp.data.accessToken)
+        dispatch(addProfile(profileResp))
+
         Toast.show({
           type: 'success',
           text1: resp.message,
         })
-        navigation.navigate('Home')
+        navigation.navigate('MainNavigator')
       } else {
         Toast.show({
           type: 'error',

@@ -5,7 +5,7 @@ import OTP from '../scenes/auth/OTP'
 import NewPassword from '../scenes/auth/NewPassword'
 import Onboarding from '../scenes/auth/Onboarding'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Home from '../scenes/main/Home'
+import Home from '../scenes/home/Home'
 
 const AuthNavigator = () => {
   const Stack = createNativeStackNavigator()

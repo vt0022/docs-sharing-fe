@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
+  Button,
   FlatList,
   Image,
   RefreshControl,
@@ -23,51 +24,58 @@ import { getPosts } from '../../api/rest/post'
 import Toast from 'react-native-toast-message'
 import { useSelector } from 'react-redux'
 import { authSelector } from '../../redux/reducers/userSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { globalStyles } from '../../styles/globalStyles'
+
 const Home = () => {
-  usePrivateAxios()
-  const auth = useSelector(authSelector)
-  console.log('auth', auth)
+  // usePrivateAxios()
 
-  const [postList, setPostList] = useState([])
-  const [page, setPage] = useState(0)
-  const [size, setSize] = useState(10)
-  const [refreshing, setRefreshing] = useState(false)
+  // useEffect(async () => {
+  //   const res = await AsyncStorage.getItem('auth')
+  //   console.log('local', res)
+  // }, [])
 
-  useEffect(() => {
-    getPostList()
-  }, [page, size])
+  // const [postList, setPostList] = useState([])
+  // const [page, setPage] = useState(0)
+  // const [size, setSize] = useState(10)
+  // const [refreshing, setRefreshing] = useState(false)
 
-  const onRefresh = () => {
-    setRefreshing(true)
-    getPostList()
-    setTimeout(() => {
-      setRefreshing(false)
-    }, 2000)
-  }
+  // useEffect(() => {
+  //   getPostList()
+  // }, [page, size])
 
-  const getPostList = async () => {
-    const response = await getPosts({
-      params: {
-        page: page,
-        size: size,
-      },
-    })
+  // const onRefresh = () => {
+  //   setRefreshing(true)
+  //   getPostList()
+  //   setTimeout(() => {
+  //     setRefreshing(false)
+  //   }, 2000)
+  // }
 
-    if (response.status === 200) {
-      setPostList(response.data.content)
-    } else {
-      Toast.show({
-        type: 'error',
-        text1: 'Vui lòng thử lại sau!',
-      })
-    }
-  }
+  // const getPostList = async () => {
+  //   const response = await getPosts({
+  //     params: {
+  //       page: page,
+  //       size: size,
+  //     },
+  //   })
+
+  //   if (response.status === 200) {
+  //     setPostList(response.data.content)
+  //   } else {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: 'Vui lòng thử lại sau!',
+  //     })
+  //   }
+  // }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F5F5F5]">
+    <SafeAreaView style={[globalStyles.container]}>
+      <StatusBar barStyle={'light-content'} />
       <TopBar />
-
-      <FlatList
+      {/* <Button onPress={() => navigation.navigate('Notifications')} title="Go to notifications" /> */}
+      {/* <FlatList
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         className="flex-1 mb-16"
         data={postList}
@@ -100,9 +108,7 @@ const Home = () => {
           )
         }}
         keyExtractor={(item) => item.postId}
-      />
-
-      <NavBar active={1} />
+      /> */}
     </SafeAreaView>
   )
 }
